@@ -41,10 +41,12 @@ def make_string_dataset(fnames):
     N=len(fnames)
     print("building dataset from %d images" % N)
     filenames = tf.constant(fnames)
-    str_dataset = tf.data.Dataset.from_tensor_slices(filenames)
+    return tf.data.Dataset.from_tensor_slices(filenames)
 
-def make_dataset(fnames, preprocessor=preprocess_image):
-    """ Construct tf dataset holding preprocessed images"""
+def make_dataset(fnames, size=(64,64), normalize=True):
+    """ Construct tf dataset holding preprocessed images.
+        size=spatial extent of images in the dataset."""
+    preproc = lambda f: preprocess_image(f, size=size, normalize=normalize)
     strd = make_string_dataset(fnames)
     #apply preproc
     return strd.map(preprocessor)
