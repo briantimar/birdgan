@@ -2,7 +2,7 @@ import numpy as np
 from scipy.ndimage import imread
 
 #uniform size for processed images
-IMSIZE=(32,32)
+IMSIZE=(64, 64)
 
 #downsampling factor along each spatial axis
 DS = 5
@@ -18,4 +18,8 @@ def crop(im):
     """center crop to IMSIZE"""
     lx, ly, _ = im.shape
     dx,dy=IMSIZE[0]//2, IMSIZE[1]//2
-    return im[lx//2-dx: lx//2 + dx + 1, ly//2 - dy: ly//2 + dy + 1, ...]
+    return im[lx//2-dx: lx//2 + dx, ly//2 - dy: ly//2 + dy, ...]
+
+def resize(im):
+    """ down sample and center crop"""
+    return crop(downsample(im))
