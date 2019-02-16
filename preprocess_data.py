@@ -29,3 +29,22 @@ def preprocess_image(fname, size=(64,64), normalize=True):
     if normalize:
         im =apply_normalization(im)
     return im
+
+def get_all_image_filenames(target="./data/birds_all/"):
+    """ returns list of all bird filenames"""
+    import glob
+    return glob.glob(target+"*")
+
+def make_string_dataset(fnames):
+    """ Make a tf string dataset using the images specified in list of filename strings
+    fnames"""
+    N=len(fnames)
+    print("building dataset from %d images" % N)
+    filenames = tf.constant(fnames)
+    str_dataset = tf.data.Dataset.from_tensor_slices(filenames)
+
+def make_dataset(fnames, preprocessor=preprocess_image):
+    """ Construct tf dataset holding preprocessed images"""
+    strd = make_string_dataset(fnames)
+    #apply preproc
+    return strd.map(preprocessor)
