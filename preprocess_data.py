@@ -15,15 +15,16 @@ def apply_normalization(im):
 
 def undo_normalization(im):
     """ take a [-1,1] normalized image to tensor to integer [0,255] range tensor"""
-    return tf.cast( .5 * (im +1) * 255, tf.int32 )
+    return (.5 *im + .5) * 255
 
 def preprocess_image(fname, size=(64,64), normalize=True):
     """ fname = filename of bird image.
         returns: float tensor of the requested spatial size."""
+    str_tensor = tf.read_file(fname)
     #load the image from jpg
-    im = tf.image.decode_jpeg(fname)
+    im = tf.image.decode_jpeg(str_tensor,channels=3)
     #resize as requested
-    im = tf.image.resize_image(im)
+    im = tf.image.resize_images(im,size=size)
     #normalize
     if normalize:
         im =apply_normalization(im)
