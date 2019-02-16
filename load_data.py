@@ -23,3 +23,8 @@ def crop(im):
 def resize(im):
     """ down sample and center crop"""
     return crop(downsample(im))
+
+
+def preprocess(im):
+    """ apply all desired preprocessing to numpy array representing raw image"""
+    return resize(im)
