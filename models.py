@@ -52,3 +52,17 @@ class DCGAN:
                                                 activation='tanh'))
         assert model.output_shape == (None, *output_shape, 1)
         return model
+
+    def build_discriminator(self):
+        """ Also stolen from the TF DCGAN tutorial"""
+        model = tf.keras.Sequential()
+        filter_sizes=[64, 128]
+        for f in filter_sizes:
+            model.add(tf.keras.layers.Conv2D(f, (5,5), strides=(2,2), padding='same'))
+            model.add(tf.keras.layers.LeakyReLU())
+            model.add(tf.keras.layers.Dropout(.3))
+        # collapse to a single dimension
+        model.add(tf.keras.layers.Flatten())
+        model.add(tf.keras.layers.Dense(1))
+
+        return model
