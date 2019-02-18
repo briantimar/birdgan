@@ -1,6 +1,14 @@
 """ tf GAN models """
 import tensorflow as tf
 
+#conventions for true and false labels
+def get_true_labels(shape):
+    """ Labels for real data"""
+    return tf.ones(shape, dtype=tf.int32)
+def get_fake_labels(shape):
+    """ Labels for fake data"""
+    return tf.zeros(shape, dtype=tf.int32)
+
 class DCGAN:
     """DCGAN:  https://arxiv.org/pdf/1511.06434.pdf.
     Here I'm borrowing the implementation from the TF tutorial (see readme)"""
@@ -53,16 +61,46 @@ class DCGAN:
         assert model.output_shape == (None, *output_shape, 1)
         return model
 
-    def build_discriminator(self):
+    def build_discriminator(self, filter_sizes=[64,128]):
         """ Also stolen from the TF DCGAN tutorial"""
         model = tf.keras.Sequential()
-        filter_sizes=[64, 128]
+
         for f in filter_sizes:
             model.add(tf.keras.layers.Conv2D(f, (5,5), strides=(2,2), padding='same'))
             model.add(tf.keras.layers.LeakyReLU())
             model.add(tf.keras.layers.Dropout(.3))
         # collapse to a single dimension
         model.add(tf.keras.layers.Flatten())
+        #the final layer is a single logit
         model.add(tf.keras.layers.Dense(1))
 
         return model
+
+def make_gen_loss(gen_logits):
+    """ Given logits of the discriminator when evaluated on generator samples,
+    return the loss function for the generator.
+
+    Assuming the discriminator outputs a single real value (ie not a )"""
+
+    target_labels = make_true_labels(tf.shape(gen_logits))
+    return tf.losses.sigmoid_cross_entropy(target_labels, gen_logits)
+
+def make_discriminator_loss(gen_logits, real_logits):
+    """
+         loss fn for the discriminator to minimize. """
+
+    gen_labels = make_false_labels(tf.shape(gen_logits))
+    real_labels = make_true_labels(tf.shape(real_logits))
+
+    gen_loss = tf.losses.sigmoid_cross_entropy(gen_labels, gen_logits)
+    real_loss = tf.losses.sigmoid_cross_entropy(real_labels, real_logits)
+    return real_loss + gen_loss
+
+def make_losses(noise_source, real_data, generator, discriminator):
+
+    gen_outputs = generator(noise_source)
+    gen_logits = discriminator(gen_outputs)
+    real_logits = discriminator(real_data)
+
+    return dict(generator=make_gen_loss(gen_logits),
+                discriminator=make_discriminator_loss(gen_logits, real_logits))
