@@ -2,10 +2,10 @@
 import tensorflow as tf
 
 #conventions for true and false labels
-def get_true_labels(shape):
+def make_true_labels(shape):
     """ Labels for real data"""
     return tf.ones(shape, dtype=tf.int32)
-def get_fake_labels(shape):
+def make_fake_labels(shape):
     """ Labels for fake data"""
     return tf.zeros(shape, dtype=tf.int32)
 
