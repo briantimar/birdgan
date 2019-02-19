@@ -5,7 +5,7 @@ import tensorflow as tf
 def make_true_labels(shape):
     """ Labels for real data"""
     return tf.ones(shape, dtype=tf.int32)
-def make_fake_labels(shape):
+def make_false_labels(shape):
     """ Labels for fake data"""
     return tf.zeros(shape, dtype=tf.int32)
 
