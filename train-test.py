@@ -80,14 +80,16 @@ config.gpu_options.allow_growth = True
 
 with tf.Session(config=config) as sess:
     tf.global_variables_initializer().run()
+    t=time.time()
     while True:
         try:
-            t=time.time()
+
             __,__, summary_ = sess.run([disc_tr_op, gen_tr_op, summary_all])
 
             if batch % batches_per_epoch==0:
                 ep=batch//epochs
                 print("time for epoch {1}: {0:.2e} sec".format(time.time()-t, ep))
+                t=time.time()
                 sampled_images_ = sess.run(sampled_images,
                                             feed_dict={noise_feed:sampling_noise_seed})
                 plot_samples(ep, sampled_images_)
