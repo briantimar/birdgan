@@ -54,11 +54,11 @@ class DCGAN:
                                             use_bias=False))
             model.add(tf.keras.layers.BatchNormalization())
             model.add(tf.keras.layers.LeakyReLU())
-        # at the final step, collapse to a single channel, apply tanh
-        model.add(tf.keras.layers.Conv2DTranspose(1, kernel_size, strides=(2,2),
+        # at the final step, collapse to three RGB channels, apply tanh
+        model.add(tf.keras.layers.Conv2DTranspose(3, kernel_size, strides=(2,2),
                                                 padding='same', use_bias=False,
                                                 activation='tanh'))
-        assert model.output_shape == (None, *output_shape, 1)
+        assert model.output_shape == (None, *output_shape, 3)
         return model
 
     def build_discriminator(self, filter_sizes=[64,128]):
