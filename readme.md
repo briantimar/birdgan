@@ -1,5 +1,12 @@
 # BirdGAN: the GAN for birds
 
+## Bird image dataset
+Currently I'm using the [CUB-200][cub-200] dataset.
+
+## Generated images
+... are in images. The current set was produced by training on 64x64 downsampled
+bird images; see `train-test`.
+
 ## References
 * GANs [for cats][catgan] by AlexiaJM
 * [GAN hacks][ganhacks]
@@ -18,3 +25,4 @@
 [dcgan]: https://arxiv.org/pdf/1511.06434.pdf
 [conv vis]: https://github.com/vdumoulin/conv_arithmetic
 [tf DCGAN]: https://github.com/tensorflow/tensorflow/blob/r1.13/tensorflow/contrib/eager/python/examples/generative_examples/dcgan.ipynb
+[cub-200]: http://www.vision.caltech.edu/visipedia/CUB-200.html
