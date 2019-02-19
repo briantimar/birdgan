@@ -8,6 +8,7 @@ Preprocessing sequence:
     - apply constant rescaling op to place pixel values in [-1,1]"""
 
 import tensorflow as tf
+import numpy as np
 
 def apply_normalization(im):
     """Normalize image tensor to take values in [-1,1]"""
@@ -15,7 +16,7 @@ def apply_normalization(im):
 
 def undo_normalization(im):
     """ take a [-1,1] normalized image to tensor to integer [0,255] range tensor"""
-    return (.5 *im + .5) * 255
+    return ((.5 *im + .5) * 255).astype(np.uint8)
 
 def preprocess_image(fname, size=(64,64), normalize=True):
     """ fname = filename of bird image.
